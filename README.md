@@ -8,6 +8,7 @@ http(s)://domain/api/v1/folders
 
 **Добавить папку**
 http(s)://domain/api/v1/folders/add
+```json
 folders = [
     { 
         "name": "Важное",
@@ -17,15 +18,18 @@ folders = [
         "only_web": false
     }
 ]
-
+```
 **Очистить папку**
 http(s)://domain/api/v1/folders/clear /* Список идентификаторов папок */
+```json
 ids= [
 	"1"
 ]
+```
 
 **Редактировать папку**
-http(s)://domain/api/v1/folders/edit 
+http(s)://domain/api/v1/folders/edit
+```json
 folders = [
 	{
 		/* Идентификатор папки (string) */
@@ -41,22 +45,27 @@ folders = [
 		"folder_access_token": "dsfafsadafsdfads
 	}
 ]
+```
 
 **Удалить папку**
 http(s)://domain/api/v1/folders/remove /* Список идентификаторов папок */
+```json
 ids= [
 	"1"
 ]
+```
 
 **Список аттачей**
 http(s)://domain/api/v1/messages/attaches /* ID письма */
 id = 14389463440000000000
 /* Email пользователя */
 email = ozherelev@mail.ru
-/* (Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) */ attach_types = [
+/* (Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) */ 
+```json
+attach_types = [
 "attach"
 ]
-
+```
 **Поиск по вложениям**
 http(s)://domain/api/v1/messages/attaches/search /* OPTIONAL Поисковый запрос (string) */
 query = фото
@@ -75,15 +84,18 @@ extra_thumbs = {"image": "137x59", "doc": "30x30"}
 /* OPTIONAL Дополнительный размеры табнейлов (boolean) */
 extra_thumbs_only = false
 /* OPTIONAL Какие поля нужно исключить из ответа, доступно: thumbnails, href ([]string) */ 
+```json
 exclude = [
-"href"
+	"href"
 ]
+```
 /* OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) */
+```json
 sort= {
-"type": "date",
-"order": "desc"
+	"type": "date",
+	"order": "desc"
 }
-
+```
 
 **Успешное получение письма**
 http(s)://domain/api/v1/messages/message
@@ -96,10 +108,12 @@ only_html = false
 
 **Перемещение писем**
 http(s)://domain/api/v1/messages/move 
-/* Идентификаторы писем для перемещения */ 
+/* Идентификаторы писем для перемещения */
+```json
 ids= [
 	"0", "1", "2"
 ]
+```
 /* Идентификатор папки, в которую переместить */
 folder = 0
 
@@ -114,6 +128,7 @@ limit = 25
 /* OPTIONAL Ограничение по длинне снипета в символах */ 
 snippet_limit = 100
 /* OPTIONAL Флаги (hash) */
+```json
 flags= {
 	/* OPTIONAL Признак прочитанности (boolean) */
 	"unread": true,
@@ -122,21 +137,27 @@ flags= {
 	/* OPTIONAL Содержит атачи (boolean) */ 
 	"attach": true
 }
+```
 /* OPTIONAL Заголовок письма (string) */
 subject = Re: Api mail.ru
 /* OPTIONAL Участники письма */
 mPop/OAuth токен
+```json
 correspondents = { 
 	/* От кого */
 	"from": "Путин", 
 	/* Кому */ 
 	"to": "Обама"
 }
+```
 /* OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) */
 transaction_category = order
-/* OPTIONAL Отрезок времени, за который производить поиск */ interval = {
-/* С (timestamp) */
-"from": 486849600,
-/* По (timestamp) */ "
-to": 1393444800
+/* OPTIONAL Отрезок времени, за который производить поиск */ 
+```json
+interval = {
+	/* С (timestamp) */
+	"from": 486849600,
+	/* По (timestamp) */ "
+	to": 1393444800
 }
+```
