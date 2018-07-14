@@ -1,13 +1,13 @@
 # CallOfData
 Hackaton 14.07.2018
 
-Short APi
+Short API<br/>
 
 **Список папок**
-http(s)://domain/api/v1/folders
+http(s)://domain/api/v1/folders<br/>
 
 **Добавить папку**
-http(s)://domain/api/v1/folders/add
+http(s)://domain/api/v1/folders/add<br/>
 ```json
 folders = [
     { 
@@ -20,7 +20,7 @@ folders = [
 ]
 ```
 **Очистить папку**
-http(s)://domain/api/v1/folders/clear /* Список идентификаторов папок */
+http(s)://domain/api/v1/folders/clear Список идентификаторов папок <br/>
 ```json
 ids= [
 	"1"
@@ -28,7 +28,7 @@ ids= [
 ```
 
 **Редактировать папку**
-http(s)://domain/api/v1/folders/edit
+http(s)://domain/api/v1/folders/edit<br/>
 ```json
 folders = [
 	{
@@ -48,7 +48,7 @@ folders = [
 ```
 
 **Удалить папку**
-http(s)://domain/api/v1/folders/remove /* Список идентификаторов папок */
+http(s)://domain/api/v1/folders/remove Список идентификаторов папок<br/>
 ```json
 ids= [
 	"1"
@@ -56,40 +56,40 @@ ids= [
 ```
 
 **Список аттачей**
-http(s)://domain/api/v1/messages/attaches /* ID письма */
-id = 14389463440000000000
-/* Email пользователя */
-email = ozherelev@mail.ru
-/* (Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) */ 
+http(s)://domain/api/v1/messages/attaches ID письма <br/>
+id = 14389463440000000000<br/>
+Email пользователя */<br/>
+email = ozherelev@mail.ru<br/>
+(Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) <br/>
 ```json
 attach_types = [
 "attach"
 ]
 ```
 **Поиск по вложениям**
-http(s)://domain/api/v1/messages/attaches/search /* OPTIONAL Поисковый запрос (string) */
-query = фото
-/* OPTIONAL Папка (int) */
-folder = 0
-/* OPTIONAL Тип вложения (image|document|audio|video|other) */
-type = image
-/* OPTIONAL Искать только в скрытых вложениях (boolean) */
-hidden_only = false
-/* OPTIONAL Смещение (int) */
-offset = 0
-/* OPTIONAL Лимит (int) */
-limit = 100
-/* OPTIONAL Дополнительный размеры тамбнейлов (object) */
-extra_thumbs = {"image": "137x59", "doc": "30x30"}
-/* OPTIONAL Дополнительный размеры табнейлов (boolean) */
-extra_thumbs_only = false
-/* OPTIONAL Какие поля нужно исключить из ответа, доступно: thumbnails, href ([]string) */ 
+http(s)://domain/api/v1/messages/attaches/search  OPTIONAL Поисковый запрос (string) <br/>
+query = фото<br/>
+OPTIONAL Папка (int)<br/>
+folder = 0<br/>
+/* OPTIONAL Тип вложения (image|document|audio|video|other) */<br/>
+type = image<br/>
+/* OPTIONAL Искать только в скрытых вложениях (boolean) */<br/>
+hidden_only = false<br/>
+/* OPTIONAL Смещение (int) */<br/>
+offset = 0<br/>
+/* OPTIONAL Лимит (int) */<br/>
+limit = 100<br/>
+/* OPTIONAL Дополнительный размеры тамбнейлов (object) */<br/>
+extra_thumbs = {"image": "137x59", "doc": "30x30"}<br/>
+/* OPTIONAL Дополнительный размеры табнейлов (boolean) */<br/>
+extra_thumbs_only = false<br/>
+/* OPTIONAL Какие поля нужно исключить из ответа, доступно: thumbnails, href ([]string) */ <br/>
 ```json
 exclude = [
 	"href"
 ]
 ```
-/* OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) */
+/* OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) */<br/>
 ```json
 sort= {
 	"type": "date",
@@ -98,36 +98,36 @@ sort= {
 ```
 
 **Успешное получение письма**
-http(s)://domain/api/v1/messages/message
-/* Идентификатор письма (string) */
-id = 12345
-/* OPTIONAL Если поле передано и true, то сервер помечает письмо прочитанным. */ 
-mark_read = true
-/* OPTIONAL Если поле передано и true, то в body.body не передаётся поле text. */
-only_html = false
+http(s)://domain/api/v1/messages/message<br/>
+/* Идентификатор письма (string) */<br/>
+id = 12345<br/>
+/* OPTIONAL Если поле передано и true, то сервер помечает письмо прочитанным. */ <br/>
+mark_read = true<br/>
+/* OPTIONAL Если поле передано и true, то в body.body не передаётся поле text. */<br/>
+only_html = false<br/>
 
 **Перемещение писем**
-http(s)://domain/api/v1/messages/move 
-/* Идентификаторы писем для перемещения */
+http(s)://domain/api/v1/messages/move <br/>
+/* Идентификаторы писем для перемещения */<br/>
 ```json
 ids= [
 	"0", "1", "2"
 ]
 ```
-/* Идентификатор папки, в которую переместить */
-folder = 0
+/* Идентификатор папки, в которую переместить */<br/>
+folder = 0<br/>
 
 
 **Поиск писем**
-http(s)://domain/api/v1/messages/search /* OPTIONAL Поисковый запрос (string) */
-query = Пробка
-/* Смещение в письмах */
-offset = 0
-/* Ограничение по количеству писем */
-limit = 25
-/* OPTIONAL Ограничение по длинне снипета в символах */ 
-snippet_limit = 100
-/* OPTIONAL Флаги (hash) */
+http(s)://domain/api/v1/messages/search /* OPTIONAL Поисковый запрос (string) */<br/>
+query = Пробка<br/>
+/* Смещение в письмах */<br/>
+offset = 0<br/>
+/* Ограничение по количеству писем */<br/>
+limit = 25<br/>
+/* OPTIONAL Ограничение по длинне снипета в символах */ <br/>
+snippet_limit = 100<br/>
+/* OPTIONAL Флаги (hash) */<br/>
 ```json
 flags= {
 	/* OPTIONAL Признак прочитанности (boolean) */
@@ -138,10 +138,10 @@ flags= {
 	"attach": true
 }
 ```
-/* OPTIONAL Заголовок письма (string) */
-subject = Re: Api mail.ru
-/* OPTIONAL Участники письма */
-mPop/OAuth токен
+/* OPTIONAL Заголовок письма (string) */<br/>
+subject = Re: Api mail.ru<br/>
+/* OPTIONAL Участники письма */<br/>
+mPop/OAuth токен<br/>
 ```json
 correspondents = { 
 	/* От кого */
@@ -150,9 +150,9 @@ correspondents = {
 	"to": "Обама"
 }
 ```
-/* OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) */
-transaction_category = order
-/* OPTIONAL Отрезок времени, за который производить поиск */ 
+/* OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) */<br/>
+transaction_category = order<br/>
+/* OPTIONAL Отрезок времени, за который производить поиск */ <br/>
 ```json
 interval = {
 	/* С (timestamp) */
