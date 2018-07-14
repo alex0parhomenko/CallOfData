@@ -13,7 +13,7 @@ folders = [
     { 
         "name": "Важное",
         "parent": "-1",
-         user | archive | social | promotions | newsletters 
+         //user | archive | social | promotions | newsletters 
         "type": "user",
         "only_web": false
     }
@@ -32,7 +32,7 @@ http(s)://domain/api/v1/folders/edit<br/>
 ```json
 folders = [
 	{
-		 Идентификатор папки (string) 
+		 //Идентификатор папки (string) 
 		"id": "0",
 		 Имя папки (string) 
 		"name": "Важное",
