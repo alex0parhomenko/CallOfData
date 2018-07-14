@@ -13,8 +13,7 @@ folders = [
     { 
         "name": "Важное",
         "parent": "-1",
-         //user | archive | social | promotions | newsletters 
-        "type": "user",
+        "type": "user",//user | archive | social | promotions | newsletters 
         "only_web": false
     }
 ]
