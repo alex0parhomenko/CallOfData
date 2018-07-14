@@ -13,14 +13,14 @@ folders = [
     { 
         "name": "Важное",
         "parent": "-1",
-        "type": "user",//user | archive | social | promotions | newsletters 
+        "type": "user", //user | archive | social | promotions | newsletters 
         "only_web": false
     }
 ]
 ```
 **Очистить папку**<br/>
 http(s)://domain/api/v1/folders/clear Список идентификаторов папок <br/>
-```json
+```javascript
 ids= [
 	"1"
 ]
@@ -29,7 +29,7 @@ ids= [
 **Редактировать папку**<br/>
 http(s)://domain/api/v1/folders/edit<br/>
 
-```json
+```javascript
 folders = [
 	{
 		 //Идентификатор папки (string) 
@@ -49,7 +49,7 @@ folders = [
 
 **Удалить папку**<br/>
 http(s)://domain/api/v1/folders/remove Список идентификаторов папок<br/>
-```json
+```javascript
 ids= [
 	"1"
 ]
@@ -61,7 +61,7 @@ id = 14389463440000000000<br/>
 Email пользователя <br/>
 email = ozherelev@mail.ru<br/>
 (Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) <br/>
-```json
+```javascript
 attach_types = [
 "attach"
 ]
@@ -84,13 +84,13 @@ extra_thumbs = {"image": "137x59", "doc": "30x30"}<br/>
  OPTIONAL Дополнительный размеры табнейлов (boolean) <br/>
 extra_thumbs_only = false<br/>
  OPTIONAL Какие поля нужно исключить из ответа, доступно: thumbnails, href ([]string)  <br/>
-```json
+```javascript
 exclude = [
 	"href"
 ]
 ```
  OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) <br/>
-```json
+```javascript
 sort= {
 	"type": "date",
 	"order": "desc"
@@ -109,7 +109,7 @@ only_html = false<br/>
 **Перемещение писем**
 http(s)://domain/api/v1/messages/move <br/>
  Идентификаторы писем для перемещения <br/>
-```json
+```javascript
 ids= [
 	"0", "1", "2"
 ]
@@ -128,7 +128,7 @@ limit = 25<br/>
  OPTIONAL Ограничение по длинне снипета в символах  <br/>
 snippet_limit = 100<br/>
  OPTIONAL Флаги (hash) <br/>
-```json
+```javascript
 flags= {
 	 OPTIONAL Признак прочитанности (boolean) 
 	"unread": true,
@@ -142,7 +142,7 @@ flags= {
 subject = Re: Api mail.ru<br/>
  OPTIONAL Участники письма <br/>
 mPop/OAuth токен<br/>
-```json
+```javascript
 correspondents = { 
 	 От кого 
 	"from": "Путин", 
@@ -153,7 +153,7 @@ correspondents = {
  OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) <br/>
 transaction_category = order<br/>
  OPTIONAL Отрезок времени, за который производить поиск <br/>
-```json
+```javascript
 interval = {
 	 С (timestamp) 
 	"from": 486849600,
