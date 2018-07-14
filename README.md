@@ -32,16 +32,14 @@ http(s)://domain/api/v1/folders/edit<br/>
 ```javascript
 folders = [
 	{
-		 //Идентификатор папки (string) 
-		"id": "0",
-		 Имя папки (string) 
-		"name": "Важное",
-		 Идентификатор родительской папки, -1 значит родительской папки нет (string)  "parent": "-1",
-		 Тип папки. Создавать можно папки следующих типов: user | archive | social | promotions | newsletters 
+		"id": "0",//Идентификатор папки (string) 
+		"name": "Важное", //Имя папки (string) 
+		 // Идентификатор родительской папки, -1 значит родительской папки нет (string)  "parent": "-1",
+		 // Тип папки. Создавать можно папки следующих типов: user | archive | social | promotions | newsletters 
 		"type": "user",
-		 Отключен доступ для почтовых клиентов по POP3/IMAP (boolean) (если параметра нет, значит false) 
+		 //Отключен доступ для почтовых клиентов по POP3/IMAP (boolean) (если параметра нет, значит false) 
 		"only_web": false,
-		 Токен сгенерированый методом генерации токенов может быть использован в место пароля от папки (Не обязательный) 
+		 // Токен сгенерированый методом генерации токенов может быть использован в место пароля от папки (Не обязательный) 
 		"folder_access_token": "dsfafsadafsdfads
 	}
 ]
@@ -58,8 +56,7 @@ ids= [
 **Список аттачей**<br/>
 http(s)://domain/api/v1/messages/attaches ID письма <br/>
 id = 14389463440000000000<br/>
-Email пользователя <br/>
-email = ozherelev@mail.ru<br/>
+email = ozherelev@mail.ru Email пользователя <br/>
 (Optional) отфильтровать аттачи только из списка типов (attach|link|cloud|cloud_stock) <br/>
 ```javascript
 attach_types = [
@@ -67,18 +64,13 @@ attach_types = [
 ]
 ```
 **Поиск по вложениям**<br/>
-http(s)://domain/api/v1/messages/attaches/search  OPTIONAL Поисковый запрос (string) <br/>
-query = фото<br/>
-OPTIONAL Папка (int)<br/>
-folder = 0<br/>
- OPTIONAL Тип вложения (image|document|audio|video|other) <br/>
-type = image<br/>
- OPTIONAL Искать только в скрытых вложениях (boolean) <br/>
-hidden_only = false<br/>
- OPTIONAL Смещение (int) <br/>
-offset = 0<br/>
- OPTIONAL Лимит (int) <br/>
-limit = 100<br/>
+http(s)://domain/api/v1/messages/attaches/search  
+query = фото OPTIONAL Поисковый запрос (string) <br/><br/>
+folder =  0 OPTIONAL Папка (int)<br/>
+type = image OPTIONAL Тип вложения (image|document|audio|video|other)<br/>
+hidden_only = false OPTIONAL Искать только в скрытых вложениях (boolean)<br/>
+offset = 0 OPTIONAL Смещение (int)<br/>
+limit = 100 OPTIONAL Лимит (int) <br/>
  OPTIONAL Дополнительный размеры тамбнейлов (object) <br/>
 extra_thumbs = {"image": "137x59", "doc": "30x30"}<br/>
  OPTIONAL Дополнительный размеры табнейлов (boolean) <br/>
@@ -89,8 +81,8 @@ exclude = [
 	"href"
 ]
 ```
- OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) <br/>
 ```javascript
+//  OPTIONAL Вид сортировки (date) и направление (asc | desc) (object) <br/>
 sort= {
 	"type": "date",
 	"order": "desc"
@@ -99,36 +91,29 @@ sort= {
 
 **Успешное получение письма**<br/>
 http(s)://domain/api/v1/messages/message<br/>
- Идентификатор письма (string) <br/>
-id = 12345<br/>
- OPTIONAL Если поле передано и true, то сервер помечает письмо прочитанным.  <br/>
-mark_read = true<br/>
- OPTIONAL Если поле передано и true, то в body.body не передаётся поле text. <br/>
-only_html = false<br/>
+id = 12345 Идентификатор письма (string) <br/>
+mark_read = true OPTIONAL Если поле передано и true, то сервер помечает письмо прочитанным.  <br/>
+only_html = false OPTIONAL Если поле передано и true, то в body.body не передаётся поле text. <br/>
 
 **Перемещение писем**
 http(s)://domain/api/v1/messages/move <br/>
- Идентификаторы писем для перемещения <br/>
 ```javascript
+// Идентификаторы писем для перемещения <br/>
 ids= [
 	"0", "1", "2"
 ]
 ```
- Идентификатор папки, в которую переместить <br/>
-folder = 0<br/>
+folder = 0 Идентификатор папки, в которую переместить <br/>
 
 
 **Поиск писем**<br/>
-http(s)://domain/api/v1/messages/search  OPTIONAL Поисковый запрос (string) <br/>
-query = Пробка<br/>
- Смещение в письмах <br/>
-offset = 0<br/>
- Ограничение по количеству писем <br/>
-limit = 25<br/>
- OPTIONAL Ограничение по длинне снипета в символах  <br/>
-snippet_limit = 100<br/>
- OPTIONAL Флаги (hash) <br/>
+http(s)://domain/api/v1/messages/search  
+query = Пробка OPTIONAL Поисковый запрос (string) <br/>
+offset = 0 Смещение в письмах <br/>
+limit = 25 Ограничение по количеству писем <br/>
+snippet_limit = 100 OPTIONAL Ограничение по длинне снипета в символах  <br/>
 ```javascript
+// OPTIONAL Флаги (hash) <br/>
 flags= {
 	 OPTIONAL Признак прочитанности (boolean) 
 	"unread": true,
@@ -138,11 +123,9 @@ flags= {
 	"attach": true
 }
 ```
- OPTIONAL Заголовок письма (string) <br/>
-subject = Re: Api mail.ru<br/>
- OPTIONAL Участники письма <br/>
-mPop/OAuth токен<br/>
+subject = Re: Api mail.ru OPTIONAL Заголовок письма (string) <br/>
 ```javascript
+//OPTIONAL Участники письма <br/>
 correspondents = { 
 	 От кого 
 	"from": "Путин", 
@@ -150,10 +133,9 @@ correspondents = {
 	"to": "Обама"
 }
 ```
- OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) <br/>
-transaction_category = order<br/>
- OPTIONAL Отрезок времени, за который производить поиск <br/>
+transaction_category = order OPTIONAL Транзакционная категория order|travel|finance|registration|event (string) <br/>
 ```javascript
+//OPTIONAL Отрезок времени, за который производить поиск <br/>
 interval = {
 	 С (timestamp) 
 	"from": 486849600,
