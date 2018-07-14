@@ -8,7 +8,7 @@ http(s)://domain/api/v1/folders<br/>
 
 **Добавить папку**<br/>
 http(s)://domain/api/v1/folders/add<br/>
-```json
+```javascript
 folders = [
     { 
         "name": "Важное",
@@ -28,6 +28,7 @@ ids= [
 
 **Редактировать папку**<br/>
 http(s)://domain/api/v1/folders/edit<br/>
+
 ```json
 folders = [
 	{
