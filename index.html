@@ -108,11 +108,41 @@
     		text-decoration-style: dashed;
 		}
 
+		.smh-dropdown {
+/*			background: white;
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+*/	    	position: absolute;
+		    top: 60px;
+		    left: 0px;
+		    will-change: transform;
+		    /*transform: translate3d(0px, 57px, 0px);*/
+		    z-index: 100500;
+		    padding-right: 2rem!important;
+		}
+		.smh-dropdown > .row {
+			background: white;
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+		}
+
+		.message-item {
+			padding: 1rem;
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+			margin-bottom: 1rem;
+		}
+
+		.image-holder {
+			padding-top: 1rem;
+		}
+
 	</style>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script>
 		const sendMessageUrl = 'http://localhost:8080/send_message'
+		const searchMessageUrl = 'http://localhost:8080/search'
 		let files = []
 		function onFileFieldChange(el) {
 			console.log('this is:', el)
@@ -152,6 +182,7 @@
 			while (attachmentsContainer.firstChild) {
 				attachmentsContainer.removeChild(attachmentsContainer.firstChild);
 			}
+			files = []
 		}
 
 		function sendForm(form) {
@@ -174,38 +205,199 @@
 			var xhr = new XMLHttpRequest();
 			xhr.open('POST', sendMessageUrl, true)
 			xhr.onload = function(e) { 
-				console.log('year!!!')
+				// console.log('year!!!')
+				closeMessageWindow()
 			}
 
 			xhr.send(formData)
 			console.log('after send here!')
 		}
+
+		const entityFields = {
+			bill: [],
+			passport: [{
+				key: 'surname', label: 'Фамилия'
+			}, {
+				key: 'name', label: 'Имя',
+			}, {
+				key: 'middlename', label: 'Отчество'
+			}]
+		}
+
+		function onSearchEntityChange(event, select) {
+			console.log('select ', event, select)
+			let filtersEl, hideFiltersButton, filterButton, filtersContainer
+			let selectedEntity = select.value
+
+			let dropdownEl = document.querySelector('.smh-dropdown')
+			filtersContainer = dropdownEl.querySelector('.smh-dropdown-items')
+			filtersContainer.innerHTML = ''
+			if (selectedEntity in entityFields && entityFields[selectedEntity].length) {
+				for (let field of entityFields[selectedEntity]) {
+					filtersEl = document.createElement('div')
+					filtersEl.classList.add('form-group', 'row')
+					filtersEl.style['margin-top'] = '1rem'
+					console.log('field is:', field)
+					filtersEl.innerHTML = `
+						<div class="col-md-12">
+							<input id="${field.key}-field" name="${field.key}" class="form-control form-control" type="text" placeholder="${field.label}">
+						</div>
+					`
+					// `<div class="form-group row" style="margin-top: 1rem;">
+					// 	<div class="col-md-12">
+					// 	<!-- <label for="surname-field" class="col-md-4 col-form-label"> Фамилия </label> -->
+					// 		<input id="surname-field" name="surname" class="form-control form-control" type="text" placeholder="Фамилия">
+					// 	</div>
+					// </div>`
+					filtersContainer.appendChild(filtersEl)
+				}
+				filterButton = document.createElement('button')
+				filterButton.classList.add('btn', 'btn-primary')
+				filterButton.innerHTML = 'Искать'
+				filterButton.onclick = function() {
+					searchData(selectedEntity)
+				}
+				filterButton.style['margin-bottom'] = '1rem'
+				filtersContainer.appendChild(filterButton)
+				
+				hideFiltersButton = document.createElement('button')
+				hideFiltersButton.classList.add('btn', 'btn-outline-secondary', 'pull-right')
+				hideFiltersButton.innerHTML = 'Скрыть фильтры'
+				hideFiltersButton.onclick = function() {
+					// filtersContainer.innerHTML = ''
+					dropdownEl.style['display'] = 'none'
+				}
+				hideFiltersButton.style['margin-bottom'] = '1rem'
+				filtersContainer.appendChild(hideFiltersButton)
+				
+				dropdownEl.style['display'] = 'inline'
+			} else {
+				dropdownEl.style['display'] = 'none'
+			}
+		}
+
+		function searchData(selectedEntity) {
+			let data = {
+				entity: selectedEntity,
+				tags: []
+			}
+			for (let field of entityFields[selectedEntity]) {
+		        data['tags'].push({
+		            "attr_name": field.key,
+		            "attr_value": document.querySelector(`#${field.key}-field`).value
+		        })
+		    }
+
+		    var xhr = new XMLHttpRequest()
+			xhr.open("POST", searchMessageUrl, true)
+			xhr.onload = function() {
+				console('i recieve a result!!!!', this)
+			}
+			// xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xhr.send(JSON.stringify(data))
+		}
+
+		function renderMessages(messages) {
+			let messagesContainer = document.querySelector('.messages-container')
+			messagesContainer.innerHTML = ''
+			let messageEl, attaches
+
+			for (let message of messages) {
+				messageEl = document.createElement('div')
+				messageEl.classList.add('row')
+
+				attaches = ''
+				for (let attach of message.body.attaches.list) {
+					console.log('attach.content_type.', attach)
+					console.log('true?', attach.content_type.indexOf('image/'))
+					if (attach.content_type.indexOf('image/') !== -1) {
+						attaches += `
+							<div class="image-holder">
+								<img src="${attach.href.view}" height="400">
+							</div>
+						`
+					}
+				}
+
+				messageEl.innerHTML = `
+					<div class="col-md-12 message-item">
+						<h4> Test message </h4>
+						<div> ${message.body.body.html} </div>
+						${attaches}
+					</div>
+				`
+				// <div class="row">
+				// 	<div class="col-md-12 message-item">
+				// 		<h4> Test message 1 </h4>
+				// 	</div>
+				// </div>
+
+				messagesContainer.appendChild(messageEl)
+			}
+		}
 	</script>
 </head>
 <body>
-	<div class="smh-main">
+	<div class="container-fluid smh-main">
 		<div class="row smh-header">
-			<div class="smh-header-menu col-md-7">
-					<img src="mail.jpg" alt="Girl in a jacket" style="width:36px;height:42px;">
-					<input type="text" placeholder="Search.." style="font-size:30px;"> 
-
-
+			<div class="smh-header-menu col-md-9" style="padding-left: 2rem;">
+				<!-- 270*56 -->
+				<img src="https://img.imgsmail.ru/r/default/portal/0.1.29/logo.HiDPI.png" alt="Mail.ru here!" style="width:135px; height:28px; margin-top: 12px;"> 
 			</div>
-			<div class="smh-header-search col-md-5 ">
-
-
-
-
-
+			<div class="smh-header-search col-md-3" style="padding-right: 2rem;">
+				<!-- <input class="form-control form-control" type="text" style="margin-top: 7px;" placeholder=".form-control"> -->
+				<select class="form-control form-control" style="margin-top: 7px;" onchange="onSearchEntityChange(event, this)">
+					<option disabled selected> Что же будем искать? </option>
+					<option value="passport"> Паспорт </option>
+					<option value="bill"> Чек </option>
+				</select>
+				<div class="container smh-dropdown" style="display: none;">
+					<div class="row">
+						<div class="col-md-12 smh-dropdown-items">
+<!-- 							<div class="form-group row" style="margin-top: 1rem;">
+								<div class="col-md-12">
+									<input id="surname-field" name="surname" class="form-control form-control" type="text" placeholder="Фамилия">
+								</div>
+							</div>
+							<div class="form-group row" style="margin-top: 1rem;">
+								<div class="col-md-12">
+								<label for="surname-field" class="col-md-4 col-form-label"> Фамилия </label>
+									<input id="surname-field" name="surname" class="form-control form-control" type="text" placeholder="Фамилия">
+								</div>
+							</div>
+							<div class="form-group row" style="margin-top: 1rem;">
+								<div class="col-md-12">
+									<input id="surname-field" name="surname" class="form-control form-control" type="text" placeholder="Фамилия">
+								</div>
+							</div>
+ -->						</div>
+					</div>
+				</div>
 			 </div>
 		</div>
 		<div class="row smh-contant-main">
-			<div class="col-md-12">
-				<button onclick="openMessageWindow(this)"> Отправить </button>
+			<div class="col-md-12" style="padding: 1rem 2rem 1rem 1rem; ">
+				<div class="row"> 
+					<div class="col-md-2">
+						<button class="btn btn-primary btn-lg" onclick="openMessageWindow(this)"> Отправить </button>
+					</div>
+					<div class="col-md-10 messages-container">
+						<div class="row">
+							<div class="col-md-12 message-item">
+								<h4> Test message 1 </h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 message-item">
+								<h4> Test message 1 </h4>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<div class="row smh-message" style="display: inline;">
+		<div class="row smh-message" style="display: none;">
 			<div class="col-md-12">
 				<form id="oneform" name="myform" action="#">
 					<div class="form-group row">
@@ -228,9 +420,6 @@
 			  		</div>
 			  		<button type="submit" class="btn btn-primary btn-lg" onclick="event.preventDefault(); return sendForm(this.form);">Отправить</button>
 			  		<button type="button" class="btn btn-secondary btn-lg pull-right" onclick="event.preventDefault(); return closeMessageWindow();">Отмена</button>
-
-
-
 
 					<!-- <input type="text" name="email" value="smartmail_team26@mail.ru"> -->
 					<!-- <input type="number" name="id" value="123456"> -->
