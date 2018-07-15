@@ -4,6 +4,9 @@
 	<title> Smart Mail Hack 700k</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
+		:root {
+			--primary: red;
+		}
 		body {
 			margin: 0;
 			padding: 0;
@@ -22,7 +25,8 @@
 /*			width: 100vw;
 			padding-left: 32px;
 			padding-right: 32px;
-*/			background-color: #178de2;
+			background-color: #178de2;
+*/			background-color: #007bff;
 		}
 
 		.smh-header-menu {
@@ -34,6 +38,74 @@
 			float: right;
 */			/*border: 1px solid red;*/
 			/*display: inline-block;*/
+		}
+
+		.attach-button {   
+			height: 48px;
+    		padding-top: 11px!important;
+			-webkit-writing-mode: horizontal-tb !important;
+		    word-spacing: normal;
+		    white-space: nowrap;
+		    vertical-align: middle;
+		    user-select: none;
+		    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+		    text-transform: none;
+		    text-transform: none;
+		    text-shadow: none;
+		    text-rendering: auto;
+		    text-indent: 0px;
+		    text-align: start;
+		    text-align: center;
+		    padding: 1px 7px 2px;
+		    padding: .375rem .75rem;
+		    overflow: visible;
+		    margin: 0em;
+		    margin: 0;
+		    line-height: inherit;
+		    line-height: 1.5;
+		    line-height: 1.5;
+		    letter-spacing: normal;
+		    font: 400 11px system-ui;
+		    font-weight: 400;
+		    font-size: inherit;
+		    font-size: 1rem;
+		    font-size: 1.25rem;
+		    font-family: inherit;
+		    display: inline-block;
+		    display: inline-block;
+		    color: initial;
+		    box-sizing: border-box;
+		    border: 1px solid transparent;
+		    border-width: 1px;
+		    border-style: solid;
+		    border-radius: .3rem;
+		    border-radius: .25rem;
+		    border-color: rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+		    border-color: #6c757d;
+		    background-image: none;
+		    background-color: transparent;
+		    -webkit-user-select: none;
+		    -ms-user-select: none;
+		    -moz-user-select: none;
+			padding: .5rem 1rem;
+			color: #6c757d;
+			cursor: pointer;
+		}
+		.attach-button:hover {
+		    text-decoration: none;
+			color: #fff;
+    		background-color: #6c757d;
+    		border-color: #6c757d;
+		}
+		.attach-file-name {
+			font: 400 11px system-ui;
+			line-height: 1.5;
+    		font-size: 1.25rem;
+    		padding-top: 11px!important;
+    		margin-right: 1rem;
+    		color: #6c757d;
+    		text-decoration: underline;
+    		text-decoration-style: dashed;
 		}
 
 	</style>
@@ -55,10 +127,13 @@
 
 		function drawFile(file) {
 			let parent = document.querySelector('.attachments-container')
-			let child = document.createElement('i')
-			child.classList.add('fa', 'fa-file')
-			child.style['font-size'] = '42pt'
-			child.style['margin'] = '5px'
+			let child = document.createElement('div')
+
+			console.log('file is:', file)
+			// <div class="attach-file-name" style="display: inline-block;"></div>
+			child.classList.add('attach-file-name')
+			child.style['display'] = 'inline-block'
+			child.innerHTML = file.name
 			parent.appendChild(child)
 		}
 
@@ -133,20 +208,43 @@
 		<div class="row smh-message" style="display: inline;">
 			<div class="col-md-12">
 				<form id="oneform" name="myform" action="#">
-					<input type="text" name="email" value="smartmail_team26@mail.ru">
+					<div class="form-group row">
+					    <!-- <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Email</label> -->
+					    <div class="col-sm-12">
+					      <input type="email" name="email" class="form-control form-control-lg" id="colFormLabelLg" placeholder="Кому пишем">
+					    </div>
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<label class="attach-button" for="attach-input" style="margin-bottom: 1rem;"> Прикрепить вложение </label> 
+						</div>
+						<div class="col-md-9 attachments-container" style="margin-bottom: 1rem;">
+							
+						</div>
+					</div>
+					<div class="form-group">
+			    		<!-- <label for="exampleFormControlTextarea1 label-lg">Example textarea</label> -->
+			    		<textarea name="text" class="form-control form-control-lg" id="exampleFormControlTextarea1" rows="5" placeholder="Напишем, пожалуй, о..."></textarea>
+			  		</div>
+			  		<button type="submit" class="btn btn-primary btn-lg" onclick="event.preventDefault(); return sendForm(this.form);">Отправить</button>
+			  		<button type="button" class="btn btn-secondary btn-lg pull-right" onclick="event.preventDefault(); return closeMessageWindow();">Отмена</button>
+
+
+
+
+					<!-- <input type="text" name="email" value="smartmail_team26@mail.ru"> -->
 					<!-- <input type="number" name="id" value="123456"> -->
-					<label for="attach-input"> Test <i class="fa fa-paperclip"></i> </label>
-					<textarea name="text"></textarea>
+					<!-- <label for="attach-input"> Test <i class="fa fa-paperclip"></i> </label> -->
+					<!-- <textarea name="text"></textarea> -->
 	
-					<input type="submit" onclick="event.preventDefault(); return sendForm(this.form);">
-					<label for="close-input"> Закрыть все нахрен! </label>
+					<!-- <input type="submit" onclick="event.preventDefault(); return sendForm(this.form);"> -->
+<!-- 					<label for="close-input"> Закрыть все нахрен! </label>
 					<input id="close-input" type="text" hidden onclick="closeMessageWindow()">
-				</form>
+ -->				</form>
 				<input id="attach-input" name="file" type="file" hidden onchange="onFileFieldChange(this)" multiple>
-				<div class="attachments-container col-md-12">
-					
+<!-- 				<div class="attachments-container col-md-12"> 
 				</div>
-			</div>	
+ -->			</div>	
 		</div>
 	</div>
 	
