@@ -69,7 +69,7 @@ class SendMessage(web.RequestHandler):
         for k, (info,) in self.request.files.items():
             name, content_type = info['filename'], info['content_type']
             if k.find('attach') != -1:
-                fname = "uploads/" + gen_string(3) + name
+                fname = "uploads/" + gen_string(8) + '.' + name.split('.')[-1]
                 output_file = open(fname, 'wb')
                 output_file.write(info['body'])
                 output_file.close()
@@ -82,9 +82,11 @@ class SendMessage(web.RequestHandler):
                 self.append_params(params)
                 new_url = add_url_params(url, params)
                 
+                 
                 files = {'file': open(fname, 'rb')}
                 res = requests.post(new_url, files=files)
-                
+
+                logger.debug(f"Upload answer {res.text}")
                 attach_id = json.loads(res.text)['body']['attach']['id']
                 attaches_list.append({'id': attach_id, 'type': 'attach'})
                 logger.debug("file upload result: {}".format(str(res.text)))
@@ -92,7 +94,7 @@ class SendMessage(web.RequestHandler):
         return file_names
 
     async def post(self):
-        data = tornado.escape.json_decode(self.request.files['body'][0]['body'])
+        data = tornado.escape.json_decode(self.get_argument('body'))
         self.append_params(data)
         Id = gen_string(32)
 

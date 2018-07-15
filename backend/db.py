@@ -1,7 +1,7 @@
 import psycopg2
 
 class DBConnection(object):
-    def __init__(self, host='localhost', dbname='testdb', user='alexandr21'):
+    def __init__(self, host='localhost', dbname='testdb', user='postgres'):
         self.__host = host
         self.__dbname = dbname
         self.__user = user

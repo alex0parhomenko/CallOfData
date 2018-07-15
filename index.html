@@ -40,7 +40,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script>
-		const sendMessageUrl = 'http://httpbin.org/anything'
+		const sendMessageUrl = 'http://localhost:8080/send_message'
 		let files = []
 		function onFileFieldChange(el) {
 			console.log('this is:', el)
@@ -138,7 +138,7 @@
 					<label for="attach-input"> Test <i class="fa fa-paperclip"></i> </label>
 					<textarea name="text"></textarea>
 	
-					<input type="submit" onclick="return sendForm(this.form);">
+					<input type="submit" onclick="event.preventDefault(); return sendForm(this.form);">
 					<label for="close-input"> Закрыть все нахрен! </label>
 					<input id="close-input" type="text" hidden onclick="closeMessageWindow()">
 				</form>
