@@ -47,8 +47,5 @@ COPY docker/entry.sh /
 #RUN psql 'host=localhost port=5432 dbname=call_of_data user=postgres' -f /sql/init.sql
 
 #polyglot
-RUN pip3 install polyglot
 RUN pip3 install pdftotree
-RUN pip install pdftotree
 RUN pip3 install html2text
-RUN pip install html2text
