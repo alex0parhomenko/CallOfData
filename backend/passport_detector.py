@@ -62,7 +62,7 @@ def replace_strange_symbol(s):
     return s
 
 def extract_person(s):
-    m = map(lambda x : ' '.join(map(lambda token : token.text, x.tokens)), filter(lambda x : x.type=='PER', ExtractorOwner().extractor(txt)))
+    m = map(lambda x : ' '.join(map(lambda token : token.text, x.tokens)), filter(lambda x : x.type=='PER', ExtractorOwner().extractor(s)))
     return list(m)
 
 def symbol2space(s, c):
