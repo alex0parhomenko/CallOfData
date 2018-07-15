@@ -12,8 +12,12 @@ RUN apt-get update \
   && pip3 install --upgrade pip
 
 RUN apt-get install -y postgresql postgresql-contrib
+RUN apt-get install -y libglib2.0-0
 
+RUN apt update && apt install -y libsm6 libxext6
+RUN apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+RUN apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
 RUN pip3 install pytesseract transliterate psycopg2 requests tornado opencv-python
-RUN pip3 install git+https://github.com/deepmipt/ner.git
+RUN pip3 install git+https://github.com/deepmipt/ner.git -q
 RUN apt-get update \
     && apt-get install -y vim
