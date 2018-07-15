@@ -48,3 +48,7 @@ COPY docker/entry.sh /
 
 #polyglot
 RUN pip3 install polyglot
+RUN pip3 install pdftotree
+RUN pip install pdftotree
+RUN pip3 install html2text
+RUN pip install html2text
