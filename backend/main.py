@@ -1,4 +1,3 @@
-#!/usr/local/bin/python3.7
 from tornado import gen, httpclient, ioloop, queues, web
 from handlers import Ping, SendMessage, DeleteMessage, Search, Index
 import logging
