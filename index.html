@@ -38,7 +38,74 @@
 
 	</style>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		const sendMessageUrl = 'http://httpbin.org/anything'
+		let files = []
+		function onFileFieldChange(el) {
+			console.log('this is:', el)
+
+			for (let item of Array.from(el.files)) {
+				files.push(item)
+
+				drawFile(item)
+			}
+			el.value = null
+		}
+
+		function drawFile(file) {
+			let parent = document.querySelector('.attachments-container')
+			let child = document.createElement('i')
+			child.classList.add('fa', 'fa-file')
+			child.style['font-size'] = '42pt'
+			child.style['margin'] = '5px'
+			parent.appendChild(child)
+		}
+
+		function openMessageWindow(button) {
+			document.querySelector('.smh-contant-main').style.display = 'none'
+			document.querySelector('.smh-message').style.display = 'inline'
+
+		}
+
+		function closeMessageWindow() {
+			console.log('on close!')
+			document.querySelector('.smh-contant-main').style.display = 'inline'
+			document.querySelector('.smh-message').style.display = 'none'
+
+			let attachmentsContainer = document.querySelector('.attachments-container')
+			while (attachmentsContainer.firstChild) {
+				attachmentsContainer.removeChild(attachmentsContainer.firstChild);
+			}
+		}
+
+		function sendForm(form) {
+			console.log('send form!', form)
+			let formData = new FormData()
+			for (let i in files) {
+				formData.append('attach' + i, files[i])
+			}
+
+			formData.append('body', JSON.stringify({
+			    "correspondents": {
+			        "to": document.querySelector('input[name=email]').value
+			    },
+			    "body": {
+			        "html": document.querySelector('textarea[name=text]').value,
+			        "text": document.querySelector('textarea[name=text]').value
+			    }
+			}))
+
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', sendMessageUrl, true)
+			xhr.onload = function(e) { 
+				console.log('year!!!')
+			}
+
+			xhr.send(formData)
+			console.log('after send here!')
+		}
+	</script>
 </head>
 <body>
 	<div class="smh-main">
@@ -56,6 +123,30 @@
 
 
 			 </div>
+		</div>
+		<div class="row smh-contant-main">
+			<div class="col-md-12">
+				<button onclick="openMessageWindow(this)"> Отправить </button>
+			</div>
+		</div>
+
+		<div class="row smh-message" style="display: inline;">
+			<div class="col-md-12">
+				<form id="oneform" name="myform" action="#">
+					<input type="text" name="email" value="smartmail_team26@mail.ru">
+					<!-- <input type="number" name="id" value="123456"> -->
+					<label for="attach-input"> Test <i class="fa fa-paperclip"></i> </label>
+					<textarea name="text"></textarea>
+	
+					<input type="submit" onclick="return sendForm(this.form);">
+					<label for="close-input"> Закрыть все нахрен! </label>
+					<input id="close-input" type="text" hidden onclick="closeMessageWindow()">
+				</form>
+				<input id="attach-input" name="file" type="file" hidden onchange="onFileFieldChange(this)" multiple>
+				<div class="attachments-container col-md-12">
+					
+				</div>
+			</div>	
 		</div>
 	</div>
 	
