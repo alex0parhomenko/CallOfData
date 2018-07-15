@@ -60,6 +60,10 @@ class SendMessage(web.RequestHandler):
             cur.execute("""INSERT INTO messages VALUES (%s,%s,%s,%s,%s)""", (Id, is_passport, is_avia, json.dumps(extra_passport), json.dumps(extra_avia)))
 
     def upload_files(self, Id, data):
+        try:
+            os.mkdir("uploads")
+        except:
+            pass
         file_names = []
         attaches_list = []
         for k, (info,) in self.request.files.items():
@@ -123,4 +127,5 @@ class Search(web.RequestHandler):
         self.__email = email
 
     async def get(self):
+        return 0
         return 0     
