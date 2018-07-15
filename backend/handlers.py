@@ -20,6 +20,12 @@ class Ping(web.RequestHandler):
         self.write('pong\n')
         self.finish()
 
+class Index(web.RequestHandler):
+    async def get(self):
+        f = open('../index.html', 'r').read() 
+        self.write(f)
+        self.finish()
+
 
 class SendMessage(web.RequestHandler):
     def initialize(self, url, token, email):

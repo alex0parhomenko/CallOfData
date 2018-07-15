@@ -1,6 +1,6 @@
 #!/usr/local/bin/python3.7
 from tornado import gen, httpclient, ioloop, queues, web
-from handlers import Ping, SendMessage, DeleteMessage, Search
+from handlers import Ping, SendMessage, DeleteMessage, Search, Index
 import logging
 
 logging.basicConfig(filename='application.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -12,6 +12,7 @@ params = dict(url='https://e.mail.ru/api/v1/messages/send',
 
 def make_app():
     return web.Application([
+        (r"/", Index),
         (r"/ping", Ping),
         (r"/send_message", SendMessage, params),
         (r"/delete_message", DeleteMessage, params),
