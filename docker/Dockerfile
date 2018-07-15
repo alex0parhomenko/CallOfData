@@ -24,6 +24,8 @@ RUN pip3 install git+https://github.com/deepmipt/ner.git -q
 RUN apt-get update \
     && apt-get install -y vim
 
+COPY index.html /
+
 #POSTGRES
 RUN mkdir -p /usr/local/pgsql/data/
 RUN chown -R postgres /usr/local/pgsql/data/
