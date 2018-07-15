@@ -16,6 +16,7 @@ import psycopg2.extras
 from copy import copy
 from tornado.gen import multi
 from multiprocessing.pool import ThreadPool
+from avia_parser import
 
 logger = logging.getLogger(__name__)
 _workers = ThreadPool(10)
@@ -46,12 +47,7 @@ class SendMessage(web.RequestHandler):
                      "email": self.__email})
 
     def avia_handler(self, data, files):
-        result = random.randint(0, 1)
-        extra_info = {'departure_time': '15.07.2018 01:25:41',
-                      'arrive_time': '21.07.2018 02:13:33',
-                      'from': 'Moscow',
-                      'to': 'Kiev'}
-        return False, extra_info
+        return __avia_handler(data, files)
 
     def passport_handler(self, data, files):
         for path in files:
