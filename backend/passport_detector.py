@@ -71,6 +71,8 @@ def symbol2space(s, c):
 
 def has_fields(img):
     roi = detect_field(img)
+    if roi is None:
+        return None
     txt_main = pytesseract.image_to_string(roi)
     txt_main = symbol2space(txt_main.lower(), '<')
     txt_main = replace_strange_symbol(txt_main)
