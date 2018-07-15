@@ -5,6 +5,8 @@ COPY backend /backend
 RUN mkdir -p /sql
 COPY sql /sql
 
+
+
 RUN apt-get update \
   && apt-get install -y python3-pip python3-dev \
   && cd /usr/local/bin \
@@ -21,3 +23,13 @@ RUN pip3 install pytesseract transliterate psycopg2 requests tornado opencv-pyth
 RUN pip3 install git+https://github.com/deepmipt/ner.git -q
 RUN apt-get update \
     && apt-get install -y vim
+
+#POSTGRES
+RUN mkdir -p /usr/local/pgsql/data/
+RUN chown -R postgres /usr/local/pgsql/data/
+RUN su postgres -c "/usr/lib/postgresql/9.5/bin/initdb -D /usr/local/pgsql/data"
+COPY docker/entry.sh /
+#RUN su postgres -c "/usr/lib/postgresql/9.5/bin/pg_ctl  -D /usr/local/pgsql/data  start"
+#
+#RUN su postgres -c "createdb call_of_data"
+#RUN psql 'host=localhost port=5432 dbname=call_of_data user=postgres' -f /sql/init.sql
