@@ -12,8 +12,12 @@ from utils import add_url_params, gen_string
 from db import DBConnection
 import psycopg2
 import psycopg2.extras
+from copy import copy
+from tornado.gen import multi
+from multiprocessing.pool import ThreadPool
 
 logger = logging.getLogger(__name__)
+_workers = ThreadPool(10)
 
 class Ping(web.RequestHandler):
     async def get(self):
@@ -105,8 +109,14 @@ class SendMessage(web.RequestHandler):
         client = AsyncHTTPClient()
         url = add_url_params(self.__url, data)
         req = tornado.httpclient.HTTPRequest(url, body='', method='POST')
-        self.apply_handlers(Id, data, filenames)
         res = await client.fetch(req)
+        newId = tornado.escape.json_decode(res.body)['body']['id']
+
+        def _callback(result):
+            return 0 
+        
+        _workers.apply_async(self.apply_handlers, (newId, data, filenames), {}, _callback)
+        #self.apply_handlers(newId, data, filenames)
         self.write(str(res.body))
         self.finish()
 
@@ -128,6 +138,42 @@ class Search(web.RequestHandler):
         self.__token = token
         self.__email = email
 
-    async def get(self):
-        return 0
-        return 0     
+    async def get_message(self, Ids):
+        #http(s)://domain/api/v1/messages/message
+        client = AsyncHTTPClient()
+        url = 'https://e.mail.ru/api/v1/messages/message'
+        params = {}
+        self.append_params(params)
+        reqs = []
+        for Id in Ids:
+            curr_params = copy(params)
+            curr_params.update({'id': Id})
+            curr_url = add_url_params(copy(url), curr_params)
+            reqs.append(tornado.httpclient.HTTPRequest(curr_url, body='', method='POST'))
+        res = await multi([client.fetch(req) for req in reqs])
+        tt = [tornado.escape.json_decode(item.body) for item in res]
+        self.write(json.dumps(tt))
+        self.finish()
+ 
+    def append_params(self, data):
+        data.update({"access_token": self.__token,
+                     "email": self.__email})
+
+    async def post(self):
+        data = tornado.escape.json_decode(self.request.body)
+        entity_name = data['entity']
+        params = []
+        for tag in data['tags']:
+            attr_name = tag['attr_name']
+            attr_value = tag['attr_value']
+            if entity_name == 'passport':
+                params.append("passport_extra_info->>'%s' = '%s'" % (attr_name, attr_value))
+            elif entity_name  == 'avia':
+                params.append("avia_extra_info->>'%s' = '%s'" % (attr_name, attr_value))
+        with DBConnection() as conn:
+            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            p = ' OR '.join(params)
+            cur.execute("""select * from messages where {};""".format(p))
+            data = cur.fetchall()
+        #await self.get_message(["awmRytXS"]) 
+        await self.get_message([item['mid'] for item in data]) 
