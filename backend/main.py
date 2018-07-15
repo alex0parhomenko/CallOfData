@@ -17,7 +17,7 @@ params = dict(url='https://e.mail.ru/api/v1/messages/send',
                token='f456320fd3e17d7ba39fbb9b1087b2fd12c14db537363830',
                email='smartmail_team26@mail.ru',
                dbname=args.dbname,
-               dbport=args.pg_port,
+               dbport=None,
                dbuser=args.pg_user)
 
 def make_app():
