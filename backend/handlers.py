@@ -27,7 +27,7 @@ class Ping(web.RequestHandler):
 
 class Index(web.RequestHandler):
     async def get(self):
-        f = open('../index.html', 'r').read() 
+        f = open('/backend/index.html', 'r').read() 
         self.write(f)
         self.finish()
 
