@@ -10,6 +10,7 @@ import requests
 import string
 from utils import add_url_params, gen_string
 from db import DBConnection
+from passport_detector import has_fields 
 import psycopg2
 import psycopg2.extras
 from copy import copy
@@ -50,11 +51,12 @@ class SendMessage(web.RequestHandler):
         return False, extra_info
 
     def passport_handler(self, data, files):
-        result = random.randint(0, 1)
-        extra_info = {'name': 'Ivan',
-                      'surname': 'Ivanov',
-                      'sex': 'm'}
-        return True, extra_info
+        for path in files:
+            image_bgr = cv2.imread(path, cv2.IMREAD_COLOR)
+            fields = has_fields(image_bgr)
+            if fields is not None:
+                return True, {'surname' : fields[0], 'name' : fields[1], 'patronymic' : fields[2]}
+        return False, {}
 
     def apply_handlers(self, Id, data, files):
         is_avia, extra_avia = self.avia_handler(data, files)
