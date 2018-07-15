@@ -93,7 +93,7 @@ class SendMessage(web.RequestHandler):
                 files = {'file': open(fname, 'rb')}
                 res = requests.post(new_url, files=files)
 
-                logger.debug(f"Upload answer {res.text}")
+                logger.debug("Upload answer {}".format(res.text))
                 attach_id = json.loads(res.text)['body']['attach']['id']
                 attaches_list.append({'id': attach_id, 'type': 'attach'})
                 logger.debug("file upload result: {}".format(str(res.text)))
