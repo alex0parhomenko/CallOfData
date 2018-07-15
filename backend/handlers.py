@@ -32,10 +32,13 @@ class Index(web.RequestHandler):
 
 
 class SendMessage(web.RequestHandler):
-    def initialize(self, url, token, email):
+    def initialize(self, url, token, email, dbname, dbport, dbuser):
         self.__url = url 
         self.__token = token
         self.__email = email
+        self.__dbname = dbname
+        self.__dbport = dbport
+        self.__dbuser = dbuser
 
     def append_params(self, data):
         data.update({"access_token": self.__token,
@@ -59,9 +62,7 @@ class SendMessage(web.RequestHandler):
     def apply_handlers(self, Id, data, files):
         is_avia, extra_avia = self.avia_handler(data, files)
         is_passport, extra_passport = self.passport_handler(data, files)
-        with DBConnection() as conn:
-            cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            cur.execute("""INSERT INTO messages VALUES (%s,%s,%s,%s,%s)""", (Id, is_passport, is_avia, json.dumps(extra_passport), json.dumps(extra_avia)))
+        return Id, is_passport, is_avia, json.dumps(extra_passport), json.dumps(extra_avia)
 
     def upload_files(self, Id, data):
         try:
@@ -112,17 +113,18 @@ class SendMessage(web.RequestHandler):
         res = await client.fetch(req)
         newId = tornado.escape.json_decode(res.body)['body']['id']
 
-        def _callback(result):
-            return 0 
+        def _callback_insert_to_db(args):
+            with DBConnection(dbname=self.__dbname, user=self.__dbuser) as conn:
+                cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+                cur.execute("""INSERT INTO messages VALUES (%s,%s,%s,%s,%s)""", (args[0], args[1], args[2], args[3], args[4])) 
         
-        _workers.apply_async(self.apply_handlers, (newId, data, filenames), {}, _callback)
-        #self.apply_handlers(newId, data, filenames)
+        _workers.apply_async(self.apply_handlers, (newId, data, filenames,), {}, _callback_insert_to_db)
         self.write(str(res.body))
         self.finish()
 
 
 class DeleteMessage(web.RequestHandler):
-    def initialize(self, url, token, email):
+    def initialize(self, url, token, email, *args, **kwargs):
         self.__url = url
         self.__token = token
         self.__email = email
@@ -133,13 +135,15 @@ class DeleteMessage(web.RequestHandler):
 
 
 class Search(web.RequestHandler):
-    def initialize(self, url, token, email):
+    def initialize(self, url, token, email, dbname, dbport, dbuser):
         self.__url = url
         self.__token = token
         self.__email = email
+        self.__dbname = dbname
+        self.__dbport = dbport
+        self.__dbuser = dbuser
 
     async def get_message(self, Ids):
-        #http(s)://domain/api/v1/messages/message
         client = AsyncHTTPClient()
         url = 'https://e.mail.ru/api/v1/messages/message'
         params = {}
@@ -175,5 +179,4 @@ class Search(web.RequestHandler):
             p = ' OR '.join(params)
             cur.execute("""select * from messages where {};""".format(p))
             data = cur.fetchall()
-        #await self.get_message(["awmRytXS"]) 
-        await self.get_message([item['mid'] for item in data]) 
+        await self.get_message([item['mid'] for item in data])
