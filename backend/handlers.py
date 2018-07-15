@@ -16,6 +16,7 @@ import psycopg2.extras
 from copy import copy
 from tornado.gen import multi
 from multiprocessing.pool import ThreadPool
+import cv2
 
 logger = logging.getLogger(__name__)
 _workers = ThreadPool(10)
@@ -27,7 +28,7 @@ class Ping(web.RequestHandler):
 
 class Index(web.RequestHandler):
     async def get(self):
-        f = open('/index.html', 'r').read() 
+        f = open('/index.html', 'rb').read() 
         self.write(f)
         self.finish()
 
@@ -120,7 +121,9 @@ class SendMessage(web.RequestHandler):
                 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
                 cur.execute("""INSERT INTO messages VALUES (%s,%s,%s,%s,%s)""", (args[0], args[1], args[2], args[3], args[4])) 
         
-        _workers.apply_async(self.apply_handlers, (newId, data, filenames,), {}, _callback_insert_to_db)
+        #_workers.apply_async(self.apply_handlers, (newId, data, filenames,), {}, _callback_insert_to_db)
+        args = self.apply_handlers(newId, data, filenames)
+        _callback_insert_to_db(args)
         self.write(str(res.body))
         self.finish()
 
