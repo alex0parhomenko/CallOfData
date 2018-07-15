@@ -62,7 +62,7 @@ def replace_strange_symbol(s):
     return s
 
 def extract_person(s):
-    m = map(lambda x : ' '.join(map(lambda token : token.text, x.tokens)), filter(lambda x : x.type=='PER', ExtractorOwner().extractor(txt)))
+    m = map(lambda x : ' '.join(map(lambda token : token.text, x.tokens)), filter(lambda x : x.type=='PER', ExtractorOwner().extractor(s)))
     return list(m)
 
 def symbol2space(s, c):
@@ -71,6 +71,8 @@ def symbol2space(s, c):
 
 def has_fields(img):
     roi = detect_field(img)
+    if roi is None:
+        return None
     txt_main = pytesseract.image_to_string(roi)
     txt_main = symbol2space(txt_main.lower(), '<')
     txt_main = replace_strange_symbol(txt_main)

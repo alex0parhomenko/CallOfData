@@ -45,3 +45,6 @@ COPY docker/entry.sh /
 #
 #RUN su postgres -c "createdb call_of_data"
 #RUN psql 'host=localhost port=5432 dbname=call_of_data user=postgres' -f /sql/init.sql
+
+#polyglot
+RUN pip3 install polyglot
