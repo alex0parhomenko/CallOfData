@@ -141,8 +141,9 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<script>
-		const sendMessageUrl = 'http://localhost:8080/send_message'
-		const searchMessageUrl = 'http://localhost:8080/search'
+		const host = 'http://0.0.0.0:8080/'
+		const sendMessageUrl = `${host}send_message`
+		const searchMessageUrl = `${host}search`
 		let files = []
 		function onFileFieldChange(el) {
 			console.log('this is:', el)
@@ -382,7 +383,7 @@
 						<button class="btn btn-primary btn-lg" onclick="openMessageWindow(this)"> Отправить </button>
 					</div>
 					<div class="col-md-10 messages-container">
-						<div class="row">
+<!-- 						<div class="row">
 							<div class="col-md-12 message-item">
 								<h4> Test message 1 </h4>
 							</div>
@@ -392,7 +393,7 @@
 								<h4> Test message 1 </h4>
 							</div>
 						</div>
-					</div>
+ -->					</div>
 				</div>
 			</div>
 		</div>
